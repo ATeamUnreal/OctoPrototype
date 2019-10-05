@@ -15,13 +15,13 @@ class OCTOPROTOTYPE_API UMyGameInstance : public UGameInstance
 	GENERATED_BODY()
 	
 public:
-	UMyGameInstance();
-
 	virtual void Init() override;
 
 	UFUNCTION(BlueprintCallable)
 	FString GetMyIpAddress();
 
-	void HandleNetworkFailure(UWorld* World, class UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString);
-	class UUserWidget* NetworkErrorWidget;
+	void HandleNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString);	
+
+	UFUNCTION(BlueprintCallable)
+	void ClientTravel(FString path);
 };

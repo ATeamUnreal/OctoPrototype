@@ -5,12 +5,7 @@
 #include "SocketSubsystem.h"
 #include <IPAddress.h>
 #include "Engine/World.h"
-#include "Blueprint/UserWidget.h"
-
-UMyGameInstance::UMyGameInstance()
-{
-
-}
+#include "GameFramework/PlayerController.h"
 
 void UMyGameInstance::Init()
 {
@@ -34,16 +29,25 @@ FString UMyGameInstance::GetMyIpAddress()
 
 void UMyGameInstance::HandleNetworkFailure(UWorld * World, UNetDriver * NetDriver, ENetworkFailure::Type FailureType, const FString & ErrorString)
 {
-	UE_LOG(LogClass, Warning, TEXT("%s"), *ErrorString);
-	//World->NextURL = FString("/Game/Maps/TPSStart.TPSStart");
+	UE_LOG(LogClass, Warning, TEXT("ERRRROR String : %s"), *ErrorString);
+	//World->NextURL = FString("/Game/Maps/NetworkError");
+	
+	
+	APlayerController* PC = GetFirstLocalPlayerController();
+	if (PC && PC->IsValidLowLevel())
+	{
+		UE_LOG(LogClass, Warning, TEXT("Travel!!"));
+		PC->ClientTravel("/Game/Maps/NetworkError", ETravelType::TRAVEL_Absolute);	
+	}
 
-	/*FStringClassReference NetworkErrorWidgetRef(TEXT("WidgetBlueprint'/Game/HJ/Blueprints/Public/NetworkErrorWidget.NetworkErrorWidget_C'"));
-	if (UClass* NetworkErrorWidgetClass = NetworkErrorWidgetRef.TryLoadClass<UUserWidget>())
-	{*/
-	//	NetworkErrorWidget = CreateWidget<UUserWidget>(this, NetworkErrorWidgetClass);
-	//	NetworkErrorWidget->AddToViewport();
-	//	NetworkErrorWidget->SetVisibility(ESlateVisibility::Collapsed);
-	//}
-	//NetworkErrorWidget->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UMyGameInstance::ClientTravel(FString path)
+{
+	APlayerController* PC = GetFirstLocalPlayerController();
+	if (PC && PC->IsValidLowLevel())
+	{
+		PC->ClientTravel(path, ETravelType::TRAVEL_Absolute);
+	}
 }
 
